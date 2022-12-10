@@ -19,9 +19,10 @@ window.addEventListener("load", async () => {
       if (cb.target.checked) {
         let itemId = urnInput.value;
         let exchangeInfo = await (await fetch(`/api/hubs/exchanges/${itemId}`)).json();
-        let source = JSON.parse(exchangeInfo).results[0].components.data.insert['autodesk.fdx:source.acc-1.0.0'].source.String
+        let source = JSON.parse(exchangeInfo).results[0].components.data.insert['autodesk.fdx:source.acc-1.0.0'].source.String;
+        let viewable = JSON.parse(exchangeInfo).results[0].components.data.insert['autodesk.fdx:contract.revitViewGeometry-1.0.0'].contract.String;
         await resizeGraphiql(graphiqlDiv, false);
-        await loadNDisplayModel(graphiqlDiv, viewerDiv, globalViewer, source.versionUrn);
+        await loadNDisplayModel(graphiqlDiv, viewerDiv, globalViewer, source.versionUrn, viewable.viewGuid);
       }
       else {
         hideModel(viewerDiv);
@@ -71,12 +72,12 @@ async function resizeGraphiql(graphiqlDiv ,increase) {
   }
 }
 
-async function loadNDisplayModel(graphiqlDiv, viewerDiv, viewer, urn) {
+async function loadNDisplayModel(graphiqlDiv, viewerDiv, viewer, urn, viewableGuid) {
   try {
     viewerDiv.style.visibility = 'visible';
     viewerDiv.style.height = `calc( ${document.body.scrollHeight}px - (1em + ${graphiqlDiv.clientHeight}px))`;
     viewer.resize();
-    loadModel(viewer, btoa(urn)).then();
+    loadModel(viewer, btoa(urn), viewableGuid).then();
   }
   catch (err) {
     console.log(`Not able to load the model: ${err}`);

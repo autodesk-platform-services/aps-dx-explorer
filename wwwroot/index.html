@@ -64,24 +64,34 @@
   <script>
     var globalViewer = '';
     var queryResponse = '';
-    let defaultQuery = `query GetDesignEntitiesByProperty{
-    designEntities(filter: { designId: "4e5c860f-ff19-3e2d-8375-89f235be54dd", propertyFilter: { name: "Volume", value: "1.0", operator: LT } }, pagination: { limit: 5 }) {
-        pagination {
-            limit
-            cursor
-        }
-        results {
-            id
-            name
-            properties {
-                results {
-                    name
-                    value
-                }
-            }
-        }
-    }
-}
+    let defaultQuery = `query getVolumeDataByCategory{
+            designEntities(
+                    filter: {
+                        exchangeId: "exchangeId", 
+                        classificationFilter: {category: "category"}}
+            ) {
+               results {
+                 id
+                 name
+                 classification {
+                   category
+                 }
+                  properties (filter: {name:"Volume" }){
+                    results {
+                        name
+                        displayValue
+                        value
+                    propertyDefinition {
+                       description
+                       specification
+                       type
+                       units
+                       }
+                     }
+                   }
+                 }
+               }
+ }
 `;
     setInitialTabs();
 
@@ -147,7 +157,7 @@ query GetHubs {
           tab.title = 'GetProjects';
           tab.query = `# Step 2 – List projects for a hub
 query GetProjects {
-projects(hubId: "b.768cae14-76b3-4531-9030-25212dab4e48") {
+projects(hubId: "hubId") {
     results {
     id
     name

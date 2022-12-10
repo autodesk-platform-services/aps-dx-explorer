@@ -1,15 +1,17 @@
 ﻿
 using RestSharp;
+using System.Web;
 
 public partial class APSService
 {
 	public async Task<dynamic> getExchange(string exchangeFileUrn, Tokens tokens)
 	{
 		var client = new HttpClient();
+		string exchangeUrnParameter = $"=={exchangeFileUrn}";
 		var request = new HttpRequestMessage
 		{
 			Method = HttpMethod.Get,
-			RequestUri = new Uri("https://developer.api.autodesk.com/exchange/v1/exchanges?filters=attribute.exchangeFileUrn%3D%3Durn%3Aadsk.wipprod%3Adm.lineage%3AZIYFqO1lSbej5yZvgYpOYw"),
+			RequestUri = new Uri($"https://developer.api.autodesk.com/exchange/v1/exchanges?filters=attribute.exchangeFileUrn{HttpUtility.UrlEncode(exchangeUrnParameter)}"),
 			Headers =
 		{
 				{ "Authorization", $"Bearer {tokens.InternalToken}" },
@@ -21,12 +23,6 @@ public partial class APSService
 			var body = await response.Content.ReadAsStringAsync();
 			return body;
 		}
-		//var client = new RestClient("https://developer.api.autodesk.com/exchange/v1/exchanges");
-		//var request = new RestRequest("", Method.Get);
-		//request.AddParameter("filters", $"attribute.exchangeFileUrn=={exchangeFileUrn}", ParameterType.QueryString, true);
-		//request.AddHeader("Authorization", $"Bearer {tokens.InternalToken}");
-		//var response = await client.ExecuteAsync(request);
-		//return response;
 	}
 }
 

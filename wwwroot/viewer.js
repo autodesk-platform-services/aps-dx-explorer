@@ -20,8 +20,7 @@ export function initViewer(container) {
     Autodesk.Viewing.Initializer({ getAccessToken }, async function () {
       const config = {
         extensions: [
-          'AIMFilterExtension',
-          'Autodesk.DocumentBrowser'
+          'AIMFilterExtension'
         ]
       }
       const viewer = new Autodesk.Viewing.GuiViewer3D(container, config);
@@ -32,9 +31,10 @@ export function initViewer(container) {
   });
 }
 
-export function loadModel(viewer, urn) {
+export function loadModel(viewer, urn, viewableGuid) {
   function onDocumentLoadSuccess(doc) {
-    viewer.loadDocumentNode(doc, doc.getRoot().getDefaultGeometry()).then(i => {
+    var viewables = doc.getRoot().findByGuid(viewableGuid);
+    viewer.loadDocumentNode(doc, viewables).then(i => {
       // documented loaded, any action?
     });
   }
