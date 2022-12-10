@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Autodesk.Forge;
 
-public partial class ForgeService
+public partial class APSService
 {
 	public string GetAuthorizationURL()
 	{

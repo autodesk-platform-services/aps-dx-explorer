@@ -3,7 +3,6 @@
 window.addEventListener("load", async () => {
   const login = document.getElementById('login');
   const urnInput = document.getElementById('modelurn');
-  const projectidInput = document.getElementById('projectid');
   const viewerToggle = document.getElementById('toggleviewer');
   const viewerDiv = document.getElementById('viewer');
   const graphiqlDiv = document.getElementById('graphiql');
@@ -19,12 +18,10 @@ window.addEventListener("load", async () => {
     try {
       if (cb.target.checked) {
         let itemId = urnInput.value;
-        if (!itemId.includes('version')) {
-          let versions = await (await fetch(`/api/hubs/${projectidInput.value}/contents/${itemId}/versions`)).json();
-          itemId = versions[0].id;
-        }
+        let exchangeInfo = await (await fetch(`/api/hubs/exchanges/${itemId}`)).json();
+        let source = JSON.parse(exchangeInfo).results[0].components.data.insert['autodesk.fdx:source.acc-1.0.0'].source.String
         await resizeGraphiql(graphiqlDiv, false);
-        await loadNDisplayModel(graphiqlDiv, viewerDiv, globalViewer, itemId);
+        await loadNDisplayModel(graphiqlDiv, viewerDiv, globalViewer, source.versionUrn);
       }
       else {
         hideModel(viewerDiv);

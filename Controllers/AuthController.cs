@@ -9,15 +9,15 @@ using Microsoft.Extensions.Logging;
 public class AuthController : ControllerBase
 {
 	private readonly ILogger<AuthController> _logger;
-	private readonly ForgeService _forgeService;
+	private readonly APSService _forgeService;
 
-	public AuthController(ILogger<AuthController> logger, ForgeService forgeService)
+	public AuthController(ILogger<AuthController> logger, APSService forgeService)
 	{
 		_logger = logger;
 		_forgeService = forgeService;
 	}
 
-	public static async Task<Tokens> PrepareTokens(HttpRequest request, HttpResponse response, ForgeService forgeService)
+	public static async Task<Tokens> PrepareTokens(HttpRequest request, HttpResponse response, APSService forgeService)
 	{
 		if (!request.Cookies.ContainsKey("internal_token"))
 		{
