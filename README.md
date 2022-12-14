@@ -16,11 +16,10 @@ It also integrates with the Viewer in order contextualize the query results.
   "APS_CALLBACK_URL": "http://localhost:8080/api/auth/callback"
 }
 ```
+
 **Make sure your APS app also uses the same callback url!**
 
 ## Running the app
-
-
 
 As instructed in the console, you'll need to open a web browser and navigate to http://localhost:8080 in order to log into your Autodesk account
 
@@ -44,19 +43,25 @@ Viewer is controlled by the toggle switch in the header. It will load the model 
 
 ---
 
+## Known issues
+
+1. The Viewer might have some trouble on resizing on Safari. Please use it with Chrome or Edge.
+
 ## Tips & Tricks
 
 ![Tips](./readme/Tips.png)
 
 1. **You need to be logged in order to use any feature in this sample.**
-2. **Item/Version id field accepts id of a version or an item. If you specify an item, it'll automatically load the latest version**
-3. **Make sure the designId and Item/Version Id are related to the same model.**
+2. **Exchange URN field accepts URN of an exchange. From there, it'll load the view in the Viewer based on the exchange's contract**
+3. **Make sure the Exchange Id and URN are related to the same exchange.**
 4. **The filter extension looks for source ids in the last query response, then look for externalIds in the loaded model to isolate them.**
 
 ## Troubleshooting
 
-1. **Cannot load viewer**: Make sure you're logged in and using a valid Item/Version Id.
+1. **Cannot load viewer**: Make sure you're logged in and using a valid exchange Id.
 
-2. **Filter Extension doesn't highlight elements**: Make sure you're using the Item/Version Id compatible with the designid used in the queries.
+2. **Filter Extension doesn't highlight elements**: Make sure you're using the exchange urn compatible with the exchange id used in the queries.
 
-3. **Can't change project id**: ProjectId input is fixed for this beta, since it only works for this project.
+## Written by
+
+João Martins [@JooPaulodeOrne2](http://twitter.com/JooPaulodeOrne2), [Developer Advocate and Support](http://aps.autodesk.com)
