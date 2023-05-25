@@ -80,6 +80,13 @@
               results {
                 name
                 value
+                propertyDefinition {
+                  description
+                  specification
+                  id
+                  units
+                  valueType
+                }
               }
             }
           }
@@ -171,6 +178,21 @@ query GetProjectFolders {
         id
         name
         __typename
+
+        folders {
+            results {
+                id
+                name
+                __typename
+            }
+        }
+        exchanges {
+            results {
+                id
+                name
+                __typename
+            }
+        }
       }
     }
   }
@@ -194,6 +216,10 @@ query GetFolderContent {
       results {
         id
         name
+        alternativeRepresentations {
+          fileUrn
+          fileVersionUrn
+        }
         __typename
       }
     }
@@ -215,16 +241,11 @@ query getExchangeInfo {
         results {
           id
           versionNumber
+          createdOn
         }
       }
       tipVersion {
         versionNumber
-      }
-    }
-    propertyDefinitions {
-      results {
-        name
-        id
       }
     }
     properties {
@@ -254,6 +275,12 @@ query getQuantityTakeoff {
           results {
             name
             value
+            propertyDefinition {
+                description
+                specification
+                valueType
+                units
+            }
           }
         }
       }
