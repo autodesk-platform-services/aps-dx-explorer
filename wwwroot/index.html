@@ -230,7 +230,7 @@ query GetFolderContent {
           tab.title = 'getExchangeInfo';
           tab.query = `# Step 5 – Get Exchange information
 query getExchangeInfo {
-  exchangeByFileId(exchangeFileId: "exchangeFileUrn") {
+  exchange(exchangeId: "exchangeId") {
     id
     name
     version {
@@ -247,6 +247,10 @@ query getExchangeInfo {
       tipVersion {
         versionNumber
       }
+    }
+    alternativeRepresentations {
+      fileUrn
+      fileVersionUrn
     }
     properties {
       results {
