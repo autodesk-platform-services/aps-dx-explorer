@@ -64,34 +64,35 @@
   <script>
     var globalViewer = '';
     var queryResponse = '';
-    let defaultQuery = `query getVolumeDataByCategory{
-            designEntities(
-                    filter: {
-                        exchangeId: "exchangeId", 
-                        classificationFilter: {category: "category"}}
-            ) {
-               results {
-                 id
-                 name
-                 classification {
-                   category
-                 }
-                  properties (filter: {name:"Volume" }){
-                    results {
-                        name
-                        displayValue
-                        value
-                    propertyDefinition {
-                       description
-                       specification
-                       type
-                       units
-                       }
-                     }
-                   }
-                 }
-               }
- }
+    let defaultQuery = `
+    query getVolumeDataByCategory {
+      exchange(exchangeId: "exchangeId") {
+        id
+        name
+        version {
+          versionNumber
+        }
+        elements(filter: {query: "property.name.category=='category'"}) {
+          results {
+            id
+            name
+            properties(filter: {names: ["Volume", "category"]}) {
+              results {
+                name
+                value
+                propertyDefinition {
+                  description
+                  specification
+                  id
+                  units
+                  valueType
+                }
+              }
+            }
+          }
+        }
+      }
+    }
 `;
     setInitialTabs();
 
@@ -169,109 +170,126 @@ projects(hubId: "hubId") {
           tab.title = 'GetProjectFolders';
           tab.query = `# Step 3 – List project folders
 query GetProjectFolders {
-            project(
-                        hubId: "hubId"
-                        projectId: "projectId"
-                ) {
-                    id
-                    name
-                    folders {
-                        results {
-                            id
-                            name
-                            items {
-                                results {
-                                    id
-                                    name
-                                    __typename
-                                    ... on BasicFile {
-                                            name
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-            }`;
+  project(projectId: "projectId") {
+    id
+    name
+    folders {
+      results {
+        id
+        name
+        __typename
+
+        folders {
+            results {
+                id
+                name
+                __typename
+            }
+        }
+        exchanges {
+            results {
+                id
+                name
+                __typename
+            }
+        }
+      }
+    }
+  }
+}`;
           break;
         case 'Step 4':
           tab.title = 'GetFolderContent';
           tab.query = `# Step 4 – List folder content
 query GetFolderContent {
-                items(
-                  projectId: "projectId"
-                  itemId: "folderId"
-                  hubId: "hubId"
-                ) {
-                  results {
-                    id
-                    name
-                    extensionType
-                   }
-                 }
-           }`;
+  folder(folderId: "folderId") {
+    id
+    name
+    folders {
+      results {
+        id
+        name
+        __typename
+      }
+    }
+    exchanges {
+      results {
+        id
+        name
+        alternativeRepresentations {
+          fileUrn
+          fileVersionUrn
+        }
+        __typename
+      }
+    }
+  }
+}`;
           break;
         case 'Step 5':
           tab.title = 'getExchangeInfo';
           tab.query = `# Step 5 – Get Exchange information
 query getExchangeInfo {
-                exchanges(filter: { exchangeFile: "exchangeFileUrn" }) {
-                  results {
-                    id
-                    name
-                    versions{
-                        results{
-                            id
-                            createdOn
-                        }
-                    }
-                    propertyGroups {
-                            results {
-                                name
-                                id
-                                properties{
-                                    results{
-                                        name
-                                        value
-                                    }
-                                }
-                            }
-                    }
-                    
-                }
-              }
-        }`;
+  exchange(exchangeId: "exchangeId") {
+    id
+    name
+    version {
+      versionNumber
+    }
+    lineage {
+      versions {
+        results {
+          id
+          versionNumber
+          createdOn
+        }
+      }
+      tipVersion {
+        versionNumber
+      }
+    }
+    alternativeRepresentations {
+      fileUrn
+      fileVersionUrn
+    }
+    properties {
+      results {
+        name
+        value
+      }
+    }
+  }
+}`;
           break;
         case 'Step 6':
           tab.title = 'getQuantityTakeoff';
           tab.query = `# Step 6 – Generate quantity takeoff
 query getQuantityTakeoff {
-    designEntities(
-            filter: {
-                exchangeId: "exchangeId", 
-                classificationFilter: {category: "category"}}
-            ) {
-               results {
-                 id
-                 name
-                 classification {
-                   category
-                 }
-                  properties{
-                    results {
-                        name
-                        displayValue
-                        value
-                    propertyDefinition {
-                       description
-                       specification
-                       type
-                       units
-                    }
-                  }
-               }
-           }
+  exchange(exchangeId: "exchangeId") {
+    id
+    name
+    version {
+      versionNumber
     }
+    elements(filter: {query: "property.name.category=='category'"}) {
+      results {
+        id
+        name
+        properties {
+          results {
+            name
+            value
+            propertyDefinition {
+                description
+                specification
+                valueType
+                units
+            }
+          }
+        }
+      }
+    }
+  }
 }`;
           break;
       }
@@ -290,7 +308,7 @@ query getQuantityTakeoff {
 
       const { headers = {} } = opts;
       return fetch(
-        "https://developer.api.autodesk.com/dataexchange/2022-11/graphql",
+        "https://developer.api.autodesk.com/dataexchange/2023-05/graphql",
         {
           method: "post",
           headers: {

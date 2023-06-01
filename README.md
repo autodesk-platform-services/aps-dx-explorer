@@ -68,4 +68,5 @@ Viewer is controlled by the toggle switch in the header. It will load the model 
 
 ## Written by
 
-João Martins [@JooPaulodeOrne2](http://twitter.com/JooPaulodeOrne2), [Developer Advocate and Support](http://aps.autodesk.com)
+- João Martins [@JooPaulodeOrne2](http://twitter.com/JooPaulodeOrne2), [Developer Advocate and Support](http://aps.autodesk.com)
+- Suraj Kumar [@suraj0223](https://www.linkedin.com/in/suraj0223/), [Software Developer]
