@@ -65,8 +65,9 @@
     var globalViewer = '';
     var queryResponse = '';
     let defaultQuery = `
-    query getVolumeDataByCategory {
-      exchange(exchangeId: "exchangeId") {
+    
+    query getVolumeDataByCategory ($exchangeId:ID!){
+      exchange(exchangeId: $exchangeId) {
         id
         name
         version {
@@ -157,20 +158,23 @@ query GetHubs {
         case 'Step 2':
           tab.title = 'GetProjects';
           tab.query = `# Step 2 – List projects for a hub
-query GetProjects {
-projects(hubId: "hubId") {
+query GetProjects($hubId:ID!) {
+projects(hubId: $hubId) {
     results {
     id
     name
     }
  }
 }`;
+          tab.variables = `{
+  "hubId": ""
+}`;
           break;
         case 'Step 3':
           tab.title = 'GetProjectFolders';
           tab.query = `# Step 3 – List project folders
-query GetProjectFolders {
-  project(projectId: "projectId") {
+query GetProjectFolders ($projectId:ID!){
+  project(projectId: $projectId) {
     id
     name
     folders {
@@ -197,12 +201,15 @@ query GetProjectFolders {
     }
   }
 }`;
+          tab.variables = `{
+  "projectId":""
+}`;
           break;
         case 'Step 4':
           tab.title = 'GetFolderContent';
           tab.query = `# Step 4 – List folder content
-query GetFolderContent {
-  folder(folderId: "folderId") {
+query GetFolderContent ($folderId:ID!) {
+  folder(folderId: $folderId) {
     id
     name
     folders {
@@ -225,12 +232,15 @@ query GetFolderContent {
     }
   }
 }`;
+          tab.variables = `{
+  "folderId": ""
+}`;
           break;
         case 'Step 5':
           tab.title = 'getExchangeInfo';
           tab.query = `# Step 5 – Get Exchange information
-query getExchangeInfo {
-  exchange(exchangeId: "exchangeId") {
+query getExchangeInfo ($exchangeId:ID!){
+  exchange(exchangeId: $exchangeId) {
     id
     name
     version {
@@ -254,12 +264,15 @@ query getExchangeInfo {
     }
   }
 }`;
+          tab.variables = `{
+  "exchangeId": ""
+}`;
           break;
         case 'Step 6':
           tab.title = 'getQuantityTakeoff';
           tab.query = `# Step 6 – Generate quantity takeoff
-query getQuantityTakeoff {
-  exchange(exchangeId: "exchangeId") {
+query getQuantityTakeoff ($exchangeId:ID!) {
+  exchange(exchangeId: $exchangeId) {
     id
     name
     version {
@@ -284,6 +297,9 @@ query getQuantityTakeoff {
       }
     }
   }
+}`;
+          tab.variables = `{
+  "exchangeId": ""
 }`;
           break;
       }
