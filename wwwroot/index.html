@@ -99,9 +99,9 @@
 
     function setInitialTabs() {
       let tabState = JSON.parse(window.localStorage.getItem('graphiql:tabState'));
-      let tutorialTabs = [{ query: 'Step 1' }, { query: 'Step 2' }, { query: 'Step 3' }, { query: 'Step 4' }, { query: 'Step 5' }, { query: 'Step 6' }].map(ensureTutorialTab);
+      let tutorialTabs = [{ query: 'Step 1' }, { query: 'Step 2' }, { query: 'Step 3' }, { query: 'Step 4' }, { query: 'Step 5' }, { query: 'Step 6' }, { query: 'Step 7' }].map(ensureTutorialTab);
       if (!!tabState) {
-        let nonTutorialTabs = tabState.tabs.filter(tab => !tab.query.match(/Step 1 – List hubs on your account|Step 2 – List projects for a hub|Step 3 – List project folders|Step 4 – List folder content|Step 5 – Get Exchange information|Step 6 – Generate quantity takeoff/g))
+        let nonTutorialTabs = tabState.tabs.filter(tab => !tab.query.match(/Step 1 – List hubs on your account|Step 2 – List projects for a hub|Step 3 – List project folders|Step 4 – List folder content|Step 5 – Get Exchange information|Step 6 – Generate quantity takeoff|Step 7 – Get list of Elements which belongs to the “Walls” category and whose area is greater than 10.0/g))
         tabState.tabs = tutorialTabs.concat(nonTutorialTabs);
       }
       else {
@@ -300,6 +300,42 @@ query getQuantityTakeoff ($exchangeId:ID!) {
 }`;
           tab.variables = `{
   "exchangeId": ""
+}`;
+        break;
+      case 'Step 7':
+        tab.title = 'getWallElementWithAreaGreaterThan10';
+        tab.query = `# Step 7 – Get list of Elements which belongs to the “Walls” category and whose area is greater than 10.0
+query GetWallElementWithAreaGreaterThan10($exchangeId: ID!, $elementFilter: ElementFilterInput, $elementPagination: PaginationInput) {
+  exchange(exchangeId: $exchangeId) {
+    id
+    name
+    elements(filter: $elementFilter, pagination: $elementPagination) {
+      pagination {
+        pageSize
+        cursor
+      }
+      results {
+        id
+        name
+        properties {
+          results {
+            name
+            value
+          }
+        }
+      }
+    }
+  }
+}`;
+        tab.variables = ` {
+  "exchangeId": "",
+  "elementFilter": {
+    "query": "property.name.category==Walls and property.name.Area>10.0"
+  },
+  "elementPagination": {
+    "limit": 2,
+    "cursor": ""
+  }
 }`;
           break;
       }
