@@ -8,7 +8,7 @@ window.addEventListener("load", async () => {
   const graphiqlDiv = document.getElementById('graphiql');
   new ResizeObserver(() => {
     viewerDiv.style.height = `calc( ${document.body.scrollHeight}px - (1em + ${graphiqlDiv.clientHeight}px))`;
-    if(!!globalViewer)
+    if (!!globalViewer)
       globalViewer.resize();
   }).observe(graphiqlDiv);
   initViewer(viewerDiv).then(viewer => {
@@ -19,10 +19,27 @@ window.addEventListener("load", async () => {
       if (cb.target.checked) {
         let itemId = urnInput.value;
         let exchangeInfo = await (await fetch(`/api/hubs/exchanges/${itemId}`)).json();
-        let source = JSON.parse(exchangeInfo).results[0].components.data.insert['autodesk.fdx:source.acc-1.0.0'].source.String;
-        let viewable = JSON.parse(exchangeInfo).results[0].components.data.insert['autodesk.fdx:contract.revitViewGeometry-1.0.0'].contract.String;
+        let fileVersionUrn = '';
+        let viewGuid = '';
+        let components = JSON.parse(exchangeInfo).results[0].components.data.insert;
+
+        for (const key in components) {
+          if (key.startsWith('autodesk.data:exchange.host')) {
+            fileVersionUrn = findValue(components[key], "versionId");
+          }
+          if (key.startsWith('autodesk.fdx:host')) {
+            fileVersionUrn = findValue(components[key], "versionUrn");
+          }
+          if (key.startsWith('autodesk.data:exchange.contract')) {
+            viewGuid = findValue(components[key], "guid");
+          }
+          if (key.startsWith('autodesk.fdx:contract')) {
+            viewGuid = findValue(components[key], "viewGuid");
+          }
+        }
+
         await resizeGraphiql(graphiqlDiv, false);
-        await loadNDisplayModel(graphiqlDiv, viewerDiv, globalViewer, source.versionUrn, viewable.viewGuid);
+        await loadNDisplayModel(graphiqlDiv, viewerDiv, globalViewer, fileVersionUrn, viewGuid);
       }
       else {
         hideModel(viewerDiv);
@@ -53,6 +70,22 @@ window.addEventListener("load", async () => {
   }
 })
 
+function findValue(obj, targetKey) {
+  for (let key in obj) {
+    if (key === targetKey) {
+      return obj[key];
+    }
+
+    if (typeof obj[key] === 'object') {
+      const result = findValue(obj[key], targetKey);
+      if (result !== undefined) {
+        return result;
+      }
+    }
+  }
+  return undefined;
+}
+
 async function showToast(message) {
   Swal.fire({
     title: message,
@@ -63,7 +96,7 @@ async function showToast(message) {
   })
 }
 
-async function resizeGraphiql(graphiqlDiv ,increase) {
+async function resizeGraphiql(graphiqlDiv, increase) {
   if (increase) {
     graphiqlDiv.style.height = 'calc(100% - 3em)';
   }
