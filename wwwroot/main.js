@@ -20,7 +20,6 @@ window.addEventListener("load", async () => {
         let itemId = urnInput.value;
         let exchangeInfo = await (await fetch(`/api/hubs/exchanges/${itemId}`)).json();
         let fileVersionUrn = '';
-        let viewGuid = '';
         let components = JSON.parse(exchangeInfo).results[0].components.data.insert;
 
         for (const key in components) {
@@ -30,16 +29,10 @@ window.addEventListener("load", async () => {
           if (key.startsWith('autodesk.fdx:host')) {
             fileVersionUrn = findValue(components[key], "versionUrn");
           }
-          if (key.startsWith('autodesk.data:exchange.contract')) {
-            viewGuid = findValue(components[key], "guid");
-          }
-          if (key.startsWith('autodesk.fdx:contract')) {
-            viewGuid = findValue(components[key], "viewGuid");
-          }
         }
 
         await resizeGraphiql(graphiqlDiv, false);
-        await loadNDisplayModel(graphiqlDiv, viewerDiv, globalViewer, fileVersionUrn, viewGuid);
+        await loadNDisplayModel(graphiqlDiv, viewerDiv, globalViewer, fileVersionUrn);
       }
       else {
         hideModel(viewerDiv);
@@ -105,12 +98,12 @@ async function resizeGraphiql(graphiqlDiv, increase) {
   }
 }
 
-async function loadNDisplayModel(graphiqlDiv, viewerDiv, viewer, urn, viewableGuid) {
+async function loadNDisplayModel(graphiqlDiv, viewerDiv, viewer, urn) {
   try {
     viewerDiv.style.visibility = 'visible';
     viewerDiv.style.height = `calc( ${document.body.scrollHeight}px - (1em + ${graphiqlDiv.clientHeight}px))`;
     viewer.resize();
-    loadModel(viewer, btoa(urn), viewableGuid).then();
+    loadModel(viewer, btoa(urn)).then();
   }
   catch (err) {
     console.log(`Not able to load the model: ${err}`);
