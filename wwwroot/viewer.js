@@ -31,9 +31,9 @@ export function initViewer(container) {
   });
 }
 
-export function loadModel(viewer, urn, viewableGuid) {
+export function loadModel(viewer, urn) {
   function onDocumentLoadSuccess(doc) {
-    var viewables = doc.getRoot().findByGuid(viewableGuid);
+    var viewables = doc.getRoot().getDefaultGeometry();
     viewer.loadDocumentNode(doc, viewables).then(i => {
       // documented loaded, any action?
     });
