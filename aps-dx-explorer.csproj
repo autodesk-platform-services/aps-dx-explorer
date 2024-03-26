@@ -6,9 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>aps_aeccim_explorer</RootNamespace>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Autodesk.Forge" Version="1.9.7" />
+    <PackageReference Include="Autodesk.Authentication" Version="1.0.0" />
+    <PackageReference Include="Autodesk.SdkManager" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

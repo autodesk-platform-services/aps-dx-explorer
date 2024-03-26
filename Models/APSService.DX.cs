@@ -1,5 +1,4 @@
 ﻿
-using RestSharp;
 using System.Web;
 
 public partial class APSService
@@ -14,7 +13,7 @@ public partial class APSService
 			RequestUri = new Uri($"https://developer.api.autodesk.com/exchange/v1/exchanges?filters=attribute.exchangeFileUrn{HttpUtility.UrlEncode(exchangeUrnParameter)}"),
 			Headers =
 		{
-				{ "Authorization", $"Bearer {tokens.InternalToken}" },
+				{ "Authorization", $"Bearer {tokens.AccessToken}" },
 		},
 		};
 		using (var response = await client.SendAsync(request))
