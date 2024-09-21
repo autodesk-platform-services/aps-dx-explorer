@@ -65,34 +65,14 @@
     var globalViewer = '';
     var queryResponse = '';
     let defaultQuery = `
-    
-    query getVolumeDataByCategory ($exchangeId:ID!){
-      exchange(exchangeId: $exchangeId) {
-        id
+query GetHubs {
+    hubs {
+      results {
         name
-        version {
-          versionNumber
-        }
-        elements(filter: {query: "property.name.category=='category'"}) {
-          results {
-            id
-            name
-            properties(filter: {names: ["Volume", "category"]}) {
-              results {
-                name
-                value
-                propertyDefinition {
-                  description
-                  specification
-                  id
-                  units
-                }
-              }
-            }
-          }
-        }
+        id
       }
     }
+}
 `;
     setInitialTabs();
 
@@ -158,12 +138,12 @@ query GetHubs {
           tab.title = 'GetProjects';
           tab.query = `# Step 2 – List projects for a hub
 query GetProjects($hubId:ID!) {
-projects(hubId: $hubId) {
+  projects(hubId: $hubId) {
     results {
-    id
-    name
+      id
+      name
     }
- }
+  }
 }`;
           tab.variables = `{
   "hubId": ""
@@ -180,22 +160,6 @@ query GetProjectFolders ($projectId:ID!){
       results {
         id
         name
-        __typename
-
-        folders {
-            results {
-                id
-                name
-                __typename
-            }
-        }
-        exchanges {
-            results {
-                id
-                name
-                __typename
-            }
-        }
       }
     }
   }
@@ -206,7 +170,7 @@ query GetProjectFolders ($projectId:ID!){
           break;
         case 'Step 4':
           tab.title = 'GetFolderContent';
-          tab.query = `# Step 4 – List folder content
+         tab.query = `# Step 4 – List folder content
 query GetFolderContent ($folderId:ID!) {
   folder(folderId: $folderId) {
     id
@@ -222,7 +186,7 @@ query GetFolderContent ($folderId:ID!) {
       results {
         id
         name
-        alternativeRepresentations {
+        alternativeIdentifiers {
           fileUrn
           fileVersionUrn
         }
@@ -230,7 +194,8 @@ query GetFolderContent ($folderId:ID!) {
       }
     }
   }
-}`;
+}
+`;
           tab.variables = `{
   "folderId": ""
 }`;
@@ -245,7 +210,7 @@ query getExchangeInfo ($exchangeId:ID!){
     version {
       versionNumber
     }
-    lineage {
+    versionHistory {
       versions {
         results {
           id
@@ -257,12 +222,13 @@ query getExchangeInfo ($exchangeId:ID!){
         versionNumber
       }
     }
-    alternativeRepresentations {
+    alternativeIdentifiers {
       fileUrn
       fileVersionUrn
     }
   }
-}`;
+}
+`;
           tab.variables = `{
   "exchangeId": ""
 }`;
@@ -277,7 +243,7 @@ query getQuantityTakeoff ($exchangeId:ID!) {
     version {
       versionNumber
     }
-    elements(filter: {query: "property.name.category=='category'"}) {
+    elements(filter: {query: "property.name.category=='Windows'"}) {
       results {
         id
         name
@@ -285,17 +251,20 @@ query getQuantityTakeoff ($exchangeId:ID!) {
           results {
             name
             value
-            propertyDefinition {
+            definition {
                 description
                 specification
-                units
+                units{
+                  name
+                }
             }
           }
         }
       }
     }
   }
-}`;
+}
+`;
           tab.variables = `{
   "exchangeId": ""
 }`;
