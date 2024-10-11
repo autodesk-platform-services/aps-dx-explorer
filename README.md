@@ -66,7 +66,7 @@ Viewer is controlled by the toggle switch in the header. It will load the model 
 
 2. **Filter Extension doesn't highlight elements**: Make sure you're using the exchange urn compatible with the exchange id used in the queries.
 
-## Written by
+## Written and updated by
 
 - João Martins [@JooPaulodeOrne2](http://twitter.com/JooPaulodeOrne2), [Developer Advocate and Support](http://aps.autodesk.com)
 - Suraj Kumar [@suraj0223](https://www.linkedin.com/in/suraj0223/), [Software Developer]
