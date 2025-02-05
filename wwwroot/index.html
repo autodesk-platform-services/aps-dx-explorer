@@ -62,7 +62,7 @@
       /><span>&nbsp; Voyager</span>
     </a>
     <button id="login" style="visibility: hidden;"  data-balloon-length="fit" aria-label="Login Here!"
-      data-balloon-pos="down">Login</button>
+            data-balloon-pos="down">Login</button>
   </div>
   <div id="graphiql"></div>
   <div id="viewer"></div>
@@ -179,7 +179,7 @@ query GetProjectFolders ($projectId:ID!){
           break;
         case 'Step 4':
           tab.title = 'GetFolderContent';
-          tab.query = `# Step 4 – List folder content
+         tab.query = `# Step 4 – List folder content
 query GetFolderContent($folderId: ID!) {
   folder(folderId: $folderId) {
     id
@@ -213,7 +213,7 @@ query GetFolderContent($folderId: ID!) {
     }
   }
 }
-  `;
+`;
           tab.variables = `{
   "folderId": ""
 }`;
