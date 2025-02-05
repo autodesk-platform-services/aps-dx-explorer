@@ -72,26 +72,27 @@
   <script>
     var globalViewer = '';
     var queryResponse = '';
-    let defaultQuery = `
-query GetHubs {
-    hubs {
-      results {
-        name
-        id
-      }
-    }
-}
-`;
+    let defaultQuery = ``;
     setInitialTabs();
 
     function setInitialTabs() {
       let tabState = JSON.parse(window.localStorage.getItem('graphiql:tabState'));
-      let tutorialTabs = [{ query: 'Step 1' }, { query: 'Step 2' }, { query: 'Step 3' }, { query: 'Step 4' }, { query: 'Step 5' }, { query: 'Step 6' }].map(ensureTutorialTab);
+      let tutorialTabs = [
+        { query: 'Step 1' },
+        { query: 'Step 2' },
+        { query: 'Step 3' },
+        { query: 'Step 4' },
+        { query: 'Step 5' },
+        { query: 'Step 6' },
+        { query: 'Step 7' },
+        { query: 'Step 8' },
+        { query: 'Step 9' }
+      ].map(ensureTutorialTab);
+
       if (!!tabState) {
-        let nonTutorialTabs = tabState.tabs.filter(tab => !tab.query.match(/Step 1 – List hubs on your account|Step 2 – List projects for a hub|Step 3 – List project folders|Step 4 – List folder content|Step 5 – Get Exchange information|Step 6 – Generate quantity takeoff/g))
+        let nonTutorialTabs = tabState.tabs.filter(tab => !tab.query.match(/Step 1 – List hubs on your account|Step 2 – List projects for a hub|Step 3 – List project folders|Step 4 – List folder content|Step 5 – Get Exchange information|Step 6 – Generate quantity takeoff|Step 7 - Create View Based Exchange|Step 8 - Create AEC Filter based Exchange|Step 9 - Get Exchange Creation Status/g))
         tabState.tabs = tutorialTabs.concat(nonTutorialTabs);
-      }
-      else {
+      } else {
         tabState = {
           activeTabIndex: 0,
           tabs: []
@@ -179,7 +180,7 @@ query GetProjectFolders ($projectId:ID!){
         case 'Step 4':
           tab.title = 'GetFolderContent';
          tab.query = `# Step 4 – List folder content
-query GetFolderContent ($folderId:ID!) {
+query GetFolderContent($folderId: ID!) {
   folder(folderId: $folderId) {
     id
     name
@@ -199,6 +200,15 @@ query GetFolderContent ($folderId:ID!) {
           fileVersionUrn
         }
         __typename
+      }
+    }
+    items {
+      ... on Items {
+        results {
+          id
+          name
+          extensionType
+        }
       }
     }
   }
@@ -267,6 +277,99 @@ query getQuantityTakeoff ($exchangeId:ID!) {
                 }
             }
           }
+        }
+      }
+    }
+  }
+}
+`;
+          tab.variables = `{
+  "exchangeId": ""
+}`;
+          break;
+        case 'Step 7':
+          tab.title = 'CreateViewBasedExchange';
+          tab.query = `# Step 7 - Create View Based Exchange
+mutation CreateViewBasedExchange(
+  $viewName: String, 
+  $sourceFileId: String!, 
+  $targetExchangeName: String!, 
+  $targetFolderId: String!
+) {
+  createExchange(
+    input: {
+      viewName: $viewName, 
+      source: {fileId: $sourceFileId}, 
+      target: {name: $targetExchangeName, folderId: $targetFolderId}}
+  ) {
+    exchange {
+      id
+      name
+      elements {
+        results {
+          id
+          name
+        }
+      }
+    }
+  }
+}`;
+          tab.variables = `{
+  "viewName": "",
+  "sourceFileId": "",
+  "targetExchangeName": "",
+  "targetFolderId": ""
+}`;
+          break;
+        case 'Step 8':
+          tab.title = 'CreateAECFilterBasedExchange';
+          tab.query = `# Step 8 - Create AEC Filter based Exchange
+mutation CreateAECFilterBasedExchange(
+  $filter: String, 
+  $sourceFileId: String!, 
+  $targetExchangeName: String!, 
+  $targetFolderId: String!
+) {
+  createExchange(
+    input: {
+      filter: $filter, 
+      source: {fileId: $sourceFileId}, 
+      target: {name: $targetExchangeName, folderId: $targetFolderId}}
+  ) {
+    exchange {
+      id
+      name
+      elements {
+        results {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+`;
+          tab.variables = `{
+  "filter": "",
+  "sourceFileId": "",
+  "targetExchangeName": "",
+  "targetFolderId": ""
+}`;
+          break;
+        case 'Step 9':
+          tab.title = 'GetExchangeStatus';
+          tab.query = `# Step 9 - Get Exchange Creation Status
+query GetExchangeStatus($exchangeId: ID!) {
+  getExchangeCreationStatus(exchangeId: $exchangeId) {
+    status
+    versionNumber
+    exchange {
+      id
+      name
+      elements {
+        results {
+          id
+          name
         }
       }
     }
