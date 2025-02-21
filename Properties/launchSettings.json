@@ -5,8 +5,8 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "APS_CLIENT_ID": "HKVjhUXySDGLGJimolxAgDdpoCuZLlql",
-        "APS_CLIENT_SECRET": "nGuECG8icGywbj1z",
+        "APS_CLIENT_ID": "",
+        "APS_CLIENT_SECRET": "",
         "APS_CALLBACK_URL": "http://localhost:8080/api/auth/callback"
       },
       "dotnetRunMessages": true,
