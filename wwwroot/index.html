@@ -409,7 +409,7 @@ query GetExchangeStatus($exchangeId: ID!) {
       ).then(async (response) => {
         queryResponse = await response.json();
         if (!!globalViewer) {
-          globalViewer.getExtension('AIMFilterExtension').filterModel();
+          globalViewer.getExtension('DXFilterExtension').filterModel();
         }
         return queryResponse;
       });
