@@ -10,6 +10,14 @@ public class Program
 
 	public static IHostBuilder CreateHostBuilder(string[] args) =>
 			Host.CreateDefaultBuilder(args)
+					.ConfigureAppConfiguration((hostingContext, config) =>
+					{
+						var env = hostingContext.HostingEnvironment;
+
+						config.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
+
+						config.AddEnvironmentVariables();
+					})
 					.ConfigureWebHostDefaults(webBuilder =>
 					{
 						webBuilder.UseStartup<Startup>();

@@ -425,13 +425,32 @@ query GetExchangeStatus($exchangeId: ID!) {
       setTimeout(() => { itemInput.removeAttribute('data-balloon-visible', ''); }, 5000);
     }
 
+    class GraphiQLWrapper extends React.Component {
+      componentDidMount() {
+        const graphiqlContainer = document.getElementsByClassName('graphiql-container')[0];
+        if (graphiqlContainer) {
+          graphiqlContainer.style.overflow = 'auto';
+        }
+      }
+
+      render() {
+        return React.createElement(GraphiQL, {
+          fetcher: this.props.fetcher,
+          defaultEditorToolsVisibility: this.props.defaultEditorToolsVisibility,
+          onTabs: this.props.onTabs,
+          query: this.props.query,
+          defaultQuery: this.props.defaultQuery,
+        });
+      }
+    }
+
     ReactDOM.render(
-      React.createElement(GraphiQL, {
+      React.createElement(GraphiQLWrapper, {
         fetcher: graphQLFetcher,
         defaultEditorToolsVisibility: true,
         onTabs: onTabs,
         query: defaultQuery,
-        defaultQuery: { defaultQuery }
+        defaultQuery: { defaultQuery },
       }),
       document.getElementById('graphiql'),
     );

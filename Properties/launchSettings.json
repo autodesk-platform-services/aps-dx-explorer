@@ -1,31 +1,8 @@
 {
   "profiles": {
-    "aps_aeccim_explorer": {
+    "aps-dx-explorer": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "APS_CLIENT_ID": "HKVjhUXySDGLGJimolxAgDdpoCuZLlql",
-        "APS_CLIENT_SECRET": "nGuECG8icGywbj1z",
-        "APS_CALLBACK_URL": "http://localhost:8080/api/auth/callback"
-      },
-      "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:8080"
-    },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    }
-  },
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:23803",
-      "sslPort": 0
     }
   }
 }

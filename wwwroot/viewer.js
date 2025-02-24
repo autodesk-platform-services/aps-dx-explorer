@@ -1,5 +1,5 @@
 ﻿/// import * as Autodesk from "@types/forge-viewer";
-import './AIMFilterExtension.js'
+import './DXFilterExtension.js'
 
 async function getAccessToken(callback) {
   try {
@@ -20,7 +20,7 @@ export function initViewer(container) {
     Autodesk.Viewing.Initializer({ getAccessToken }, async function () {
       const config = {
         extensions: [
-          'AIMFilterExtension'
+          'DXFilterExtension'
         ]
       }
       const viewer = new Autodesk.Viewing.GuiViewer3D(container, config);
