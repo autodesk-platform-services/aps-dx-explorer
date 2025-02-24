@@ -2,6 +2,14 @@
   "profiles": {
     "aps-dx-explorer": {
       "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APS_CLIENT_ID": "",
+        "APS_CLIENT_SECRET": "",
+        "APS_CALLBACK_URL": "http://localhost:8080/api/auth/callback"
+      },
+      "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:8080"
     }
   }
