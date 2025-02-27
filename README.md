@@ -58,7 +58,7 @@ Viewer is controlled by the toggle switch in the header. It will load the model 
 1. **You need to be logged in order to use any feature in this sample.**
 2. **Exchange URN field accepts URN of an exchange. From there, it'll load the view in the Viewer based on the exchange's contract**
 3. **Make sure the Exchange Id and URN are related to the same exchange.**
-4. **The filter extension looks for source ids in the last query response, then look for externalIds in the loaded model to isolate them.**
+4. **The filter extension looks for `externalElementId` in the last query response, then look for externalIds in the loaded model to isolate them.**
 
 ## Troubleshooting
 
