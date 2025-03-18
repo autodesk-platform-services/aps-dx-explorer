@@ -2,138 +2,143 @@
 <html>
 
 <head>
-  <title>Data Exchange Explorer - BETA</title>
-  <meta charset="utf-8" />
-  <link rel="shortcut icon" href="https://cdn.autodesk.io/favicon.ico">
-  <link rel="mask-icon" href="https://cdn.autodesk.io/favicon.ico">
-  <style>
-    body {
-      height: 100%;
-      margin: 0;
-      width: 100%;
-      overflow: hidden;
-    }
+    <title>Data Exchange Explorer - BETA</title>
+    <meta charset="utf-8"/>
+    <link rel="shortcut icon" href="https://cdn.autodesk.io/favicon.ico">
+    <link rel="mask-icon" href="https://cdn.autodesk.io/favicon.ico">
+    <style>
+        body {
+            height: 100%;
+            margin: 0;
+            width: 100%;
+            overflow: hidden;
+        }
 
-    #graphiql {
-      height: calc(100vh - 3em);
-    }
-  </style>
-  <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-alpha1/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="main.css" />
-  <!-- This link will always fetch the latest version of Balloon.css -->
-  <link rel="stylesheet" href="https://unpkg.com/balloon-css/balloon.min.css">
-  <!--
-    This GraphiQL example depends on Promise and fetch, which are available in
-    modern browsers, but can be "polyfilled" for older browsers.
-    GraphiQL itself depends on React DOM.
-    If you do not want to rely on a CDN, you can host these files locally or
-    include them directly in your favored resource bundler.
-  -->
-  <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+        #graphiql {
+            height: calc(100vh - 3em);
+        }
+    </style>
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-alpha1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="main.css"/>
+    <!-- This link will always fetch the latest version of Balloon.css -->
+    <link rel="stylesheet" href="https://unpkg.com/balloon-css/balloon.min.css">
+    <!--
+      This GraphiQL example depends on Promise and fetch, which are available in
+      modern browsers, but can be "polyfilled" for older browsers.
+      GraphiQL itself depends on React DOM.
+      If you do not want to rely on a CDN, you can host these files locally or
+      include them directly in your favored resource bundler.
+    -->
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
 
-  <!--
-    These two files can be found in the npm module, however you may wish to
-    copy them directly into your environment, or perhaps include them in your
-    favored resource bundler.
-   -->
-  <link rel="stylesheet" href="https://unpkg.com/graphiql@2.0.13/graphiql.min.css" />
+    <!--
+      These two files can be found in the npm module, however you may wish to
+      copy them directly into your environment, or perhaps include them in your
+      favored resource bundler.
+     -->
+    <link rel="stylesheet" href="https://unpkg.com/graphiql@2.0.13/graphiql.min.css"/>
 </head>
 
 <body>
-  <div id="header">
+<div id="header">
     <img class="logo" src="https://cdn.autodesk.io/logo/black/stacked.png" alt="Autodesk Platform Services">
     <span class="title">Data Exchange Model Explorer - BETA</span>
-    <div id="iteminput" data-balloon-length="fit" aria-label="Here goes an Exchange urn id like urn:adsk.wipprod:dm.lineage..."
-            data-balloon-pos="down">
-      <input type="text" placeholder="EXCHANGE URN HERE" id="modelurn" />
+    <div id="iteminput" data-balloon-length="fit"
+         aria-label="Here goes an Exchange urn id like urn:adsk.wipprod:dm.lineage..."
+         data-balloon-pos="down">
+        <input type="text" placeholder="EXCHANGE URN HERE" id="modelurn"/>
     </div>
     <div class="form-check form-switch form-switch-sm">
-      <input class="form-check-input" type="checkbox" id="toggleviewer">
-      <label class="form-check-label" for="toggleviewer" style="margin:0.3em">Viewer</label>
+        <input class="form-check-input" type="checkbox" id="toggleviewer">
+        <label class="form-check-label" for="toggleviewer" style="margin:0.3em">Viewer</label>
     </div>
     <a type="button" class="btn btn-light mr-3" target="_blank" href="/voyager.html">
-      <img src="voyager.svg"  
-        class="header-button"
-        width="24"
-        height="24" 
-        title="Voyager" 
-      /><span>&nbsp; Voyager</span>
+        <img src="voyager.svg"
+             class="header-button"
+             width="24"
+             height="24"
+             title="Voyager"
+        /><span>&nbsp; Voyager</span>
     </a>
-    <button id="login" style="visibility: hidden;"  data-balloon-length="fit" aria-label="Login Here!"
-            data-balloon-pos="down">Login</button>
-  </div>
-  <div id="graphiql"></div>
-  <div id="viewer"></div>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://unpkg.com/graphiql@2.0.13/graphiql.min.js" type="application/javascript"></script>
-  <script src="main.js" type="module"></script>
-  <script>
+    <button id="login" style="visibility: hidden;" data-balloon-length="fit" aria-label="Login Here!"
+            data-balloon-pos="down">Login
+    </button>
+</div>
+<div id="graphiql"></div>
+<div id="viewer"></div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/graphiql@2.0.13/graphiql.min.js" type="application/javascript"></script>
+<script src="main.js" type="module"></script>
+<script>
     var globalViewer = '';
     var queryResponse = '';
     let defaultQuery = ``;
     setInitialTabs();
 
     function setInitialTabs() {
-      let tabState = JSON.parse(window.localStorage.getItem('graphiql:tabState'));
-      let tutorialTabs = [
-        { query: 'Step 1' },
-        { query: 'Step 2' },
-        { query: 'Step 3' },
-        { query: 'Step 4' },
-        { query: 'Step 5' },
-        { query: 'Step 6' },
-        { query: 'Step 7' },
-        { query: 'Step 8' },
-        { query: 'Step 9' }
-      ].map(ensureTutorialTab);
+        let tabState = JSON.parse(window.localStorage.getItem('graphiql:tabState'));
+        let tutorialTabs = [
+            {query: 'Step 1'},
+            {query: 'Step 2'},
+            {query: 'Step 3'},
+            {query: 'Step 4'},
+            {query: 'Step 5'},
+            {query: 'Step 6'},
+            {query: 'Step 7'},
+            {query: 'Step 8'},
+            {query: 'Step 9'},
+            {query: 'Step 10'},
+            {query: 'Step 11'}
+        ].map(ensureTutorialTab);
 
-      if (!!tabState) {
-        let nonTutorialTabs = tabState.tabs.filter(tab => !tab.query.match(/Step 1 – List hubs on your account|Step 2 – List projects for a hub|Step 3 – List project folders|Step 4 – List folder content|Step 5 – Get Exchange information|Step 6 – Generate quantity takeoff|Step 7 - Create View Based Exchange|Step 8 - Create AEC Filter based Exchange|Step 9 - Get Exchange Creation Status/g))
-        tabState.tabs = tutorialTabs.concat(nonTutorialTabs);
-      } else {
-        tabState = {
-          activeTabIndex: 0,
-          tabs: []
-        };
-        tabState.tabs.push(...tutorialTabs);
-      }
-      let tabStateString = JSON.stringify(tabState);
-      window.localStorage.setItem('graphiql:tabState', tabStateString);
+        if (!!tabState) {
+            let nonTutorialTabs = tabState.tabs.filter(tab => !tab.query.match(/Step 1 – List hubs on your account|Step 2 – List projects for a hub|Step 3 – List project folders|Step 4 – List folder content|Step 5 – Get Exchange information|Step 6 – Generate quantity takeoff|Step 7 - Filter using complex query|Step 8 - Create View Based Exchange|Step 9 - Create AEC Filter based Exchange|Step 10 - Get Exchange Creation Status|Step 11 - Get Exchange By Version/g))
+            tabState.tabs = tutorialTabs.concat(nonTutorialTabs);
+        } else {
+            tabState = {
+                activeTabIndex: 0,
+                tabs: []
+            };
+            tabState.tabs.push(...tutorialTabs);
+        }
+        let tabStateString = JSON.stringify(tabState);
+        window.localStorage.setItem('graphiql:tabState', tabStateString);
 
     }
 
     function generateUUID() {
-      let
-        d = new Date().getTime(),
-        d2 = (performance && performance.now && (performance.now() * 1000)) || 0;
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-        let r = Math.random() * 16;
-        if (d > 0) {
-          r = (d + r) % 16 | 0;
-          d = Math.floor(d / 16);
-        } else {
-          r = (d2 + r) % 16 | 0;
-          d2 = Math.floor(d2 / 16);
-        }
-        return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
-      });
+        let
+            d = new Date().getTime(),
+            d2 = (performance && performance.now && (performance.now() * 1000)) || 0;
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+            let r = Math.random() * 16;
+            if (d > 0) {
+                r = (d + r) % 16 | 0;
+                d = Math.floor(d / 16);
+            } else {
+                r = (d2 + r) % 16 | 0;
+                d2 = Math.floor(d2 / 16);
+            }
+            return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
+        });
     };
 
 
     function ensureTutorialTab(tab) {
-      let task = tab.query;
-      tab.hash = null;
-      tab.headers = null;
-      tab.id = generateUUID();
-      tab.operationName = null;
-      tab.response = null;
-      tab.variables = null;
-      switch (task) {
-        case 'Step 1':
-          tab.title = 'GetHubs';
-          tab.query = `# Step 1 – List hubs on your account
+        let task = tab.query;
+        tab.hash = null;
+        tab.headers = null;
+        tab.id = generateUUID();
+        tab.operationName = null;
+        tab.response = null;
+        tab.variables = null;
+        switch (task) {
+            case 'Step 1':
+                tab.title = 'GetHubs';
+                tab.query = `# Step 1 – List hubs on your account
 query GetHubs {
   hubs {
     results {
@@ -142,10 +147,13 @@ query GetHubs {
     }
   }
 }`;
-          break;
-        case 'Step 2':
-          tab.title = 'GetProjects';
-          tab.query = `# Step 2 – List projects for a hub
+                tab.headers = `{
+  "Region": ""
+}`;
+                break;
+            case 'Step 2':
+                tab.title = 'GetProjects';
+                tab.query = `# Step 2 – List projects for a hub
 query GetProjects($hubId:ID!) {
   projects(hubId: $hubId) {
     results {
@@ -154,13 +162,17 @@ query GetProjects($hubId:ID!) {
     }
   }
 }`;
-          tab.variables = `{
+                tab.headers = `{
+  "Region": ""
+}`;
+                tab.variables = `{
   "hubId": ""
 }`;
-          break;
-        case 'Step 3':
-          tab.title = 'GetProjectFolders';
-          tab.query = `# Step 3 – List project folders
+
+                break;
+            case 'Step 3':
+                tab.title = 'GetProjectFolders';
+                tab.query = `# Step 3 – List project folders
 query GetProjectFolders ($projectId:ID!){
   project(projectId: $projectId) {
     id
@@ -173,13 +185,16 @@ query GetProjectFolders ($projectId:ID!){
     }
   }
 }`;
-          tab.variables = `{
+                tab.headers = `{
+  "Region": ""
+}`;
+                tab.variables = `{
   "projectId":""
 }`;
-          break;
-        case 'Step 4':
-          tab.title = 'GetFolderContent';
-         tab.query = `# Step 4 – List folder content
+                break;
+            case 'Step 4':
+                tab.title = 'GetFolderContent';
+                tab.query = `# Step 4 – List folder content
 query GetFolderContent($folderId: ID!) {
   folder(folderId: $folderId) {
     id
@@ -214,13 +229,16 @@ query GetFolderContent($folderId: ID!) {
   }
 }
 `;
-          tab.variables = `{
+                tab.headers = `{
+  "Region": ""
+}`;
+                tab.variables = `{
   "folderId": ""
 }`;
-          break;
-        case 'Step 5':
-          tab.title = 'getExchangeInfo';
-          tab.query = `# Step 5 – Get Exchange information
+                break;
+            case 'Step 5':
+                tab.title = 'getExchangeInfo';
+                tab.query = `# Step 5 – Get Exchange information
 query getExchangeInfo ($exchangeId:ID!){
   exchange(exchangeId: $exchangeId) {
     id
@@ -247,13 +265,16 @@ query getExchangeInfo ($exchangeId:ID!){
   }
 }
 `;
-          tab.variables = `{
+                tab.headers = `{
+  "Region": ""
+}`;
+                tab.variables = `{
   "exchangeId": ""
 }`;
-          break;
-        case 'Step 6':
-          tab.title = 'getQuantityTakeoff';
-          tab.query = `# Step 6 – Generate quantity takeoff
+                break;
+            case 'Step 6':
+                tab.title = 'getQuantityTakeoff';
+                tab.query = `# Step 6 – Generate quantity takeoff
 query getQuantityTakeoff ($exchangeId:ID!) {
   exchange(exchangeId: $exchangeId) {
     id
@@ -283,14 +304,58 @@ query getQuantityTakeoff ($exchangeId:ID!) {
   }
 }
 `;
-          tab.variables = `{
+                tab.headers = `{
+  "Region": ""
+}`;
+                tab.variables = `{
   "exchangeId": ""
 }`;
-          break;
-        case 'Step 7':
-          tab.title = 'CreateViewBasedExchange';
-          tab.query = `# Step 7 - Create View Based Exchange
-mutation CreateViewBasedExchange(
+                break;
+            case 'Step 7':
+                tab.title = 'FilterUsingComplexQuery';
+                tab.query = `# Step 7 - Filter using complex query
+query FilterUsingComplexQuery( $exchangeId: ID!, 
+                                  $elementFilter: ElementFilterInput, 
+                                  $elementPagination: PaginationInput) {
+  exchange(exchangeId: $exchangeId) {
+    id
+    name
+    elements(filter: $elementFilter, pagination: $elementPagination) {
+      pagination {
+        pageSize
+        cursor
+      }
+      results {
+        id
+        name
+        properties {
+          results {
+            name
+            value
+          }
+        }
+      }
+    }
+  }
+}`;
+                tab.headers = `{
+  "Region": ""
+}`;
+                tab.variables = `{
+"exchangeId": "",
+"elementFilter": {
+  "query": "property.name.category==Walls and property.name.Area>10.0"
+},
+"elementPagination": {
+  "limit": 2,
+  "cursor": ""
+}
+}`;
+                break;
+            case 'Step 8':
+                tab.title = 'CreateRevitBasedExchange';
+                tab.query = `# Step 8 - Create View Based Exchange
+mutation CreateRevitBasedExchange(
   $viewName: String, 
   $sourceFileId: String!, 
   $targetExchangeName: String!, 
@@ -314,17 +379,20 @@ mutation CreateViewBasedExchange(
     }
   }
 }`;
-          tab.variables = `{
+                tab.headers = `{
+  "Region": ""
+}`;
+                tab.variables = `{
   "viewName": "",
   "sourceFileId": "",
   "targetExchangeName": "",
   "targetFolderId": ""
 }`;
-          break;
-        case 'Step 8':
-          tab.title = 'CreateAECFilterBasedExchange';
-          tab.query = `# Step 8 - Create AEC Filter based Exchange
-mutation CreateAECFilterBasedExchange(
+                break;
+            case 'Step 9':
+                tab.title = 'CreateAECDMBasedExchange';
+                tab.query = `# Step 9 - Create AEC Filter based Exchange
+mutation CreateAECDMBasedExchange(
   $filter: String, 
   $sourceFileId: String!, 
   $targetExchangeName: String!, 
@@ -349,16 +417,19 @@ mutation CreateAECFilterBasedExchange(
   }
 }
 `;
-          tab.variables = `{
+                tab.headers = `{
+  "Region": ""
+}`;
+                tab.variables = `{
   "filter": "",
   "sourceFileId": "",
   "targetExchangeName": "",
   "targetFolderId": ""
 }`;
-          break;
-        case 'Step 9':
-          tab.title = 'GetExchangeStatus';
-          tab.query = `# Step 9 - Get Exchange Creation Status
+                break;
+            case 'Step 10':
+                tab.title = 'GetExchangeStatus';
+                tab.query = `# Step 10 - Get Exchange Creation Status
 query GetExchangeStatus($exchangeId: ID!) {
   getExchangeCreationStatus(exchangeId: $exchangeId) {
     status
@@ -376,86 +447,121 @@ query GetExchangeStatus($exchangeId: ID!) {
   }
 }
 `;
-          tab.variables = `{
+                tab.headers = `{
+  "Region": ""
+}`;
+                tab.variables = `{
   "exchangeId": ""
 }`;
-          break;
+                break;
+            case 'Step 11':
+                tab.title = 'GetExchangeByVersions';
+                tab.query = `# Step 11 - Get Exchange By Version
+query GetExchangeByVersions($exchangeId: ID!, $filter: ExchangeFilterInput!) {
+  exchangeByVersions(exchangeId: $exchangeId, filter: $filter) {
+    elements(filter: {query: "property.name.category=='Walls'"}) {
+      results {
+        id
+        name
+        properties (filter:{names:["Element Name","Operation"]}){
+          results {
+            name
+            value
+          }
+        }
       }
-      return tab;
+    }
+  }
+}
+`;
+                tab.headers = `{
+  "Region": ""
+}`;
+                tab.variables = `{
+  "exchangeId": "",
+    "filter": {
+    "query": "version.fromId==latest-1 and version.toId==latest"
+  }
+}`;
+                break;
+        }
+        return tab;
     }
 
     async function graphQLFetcher(graphQLParams, opts) {
-      // check if existing token still valid, if not refresh
-      let res = await fetch(`api/auth/token`);
-      let resJSON = await res.json();
-      accessToken = resJSON.access_token;
-      if (accessToken === undefined) {
-        showHelpers('login');
-        return 'Please login first';
-      }
+        // check if existing token still valid, if not refresh
+        let res = await fetch(`api/auth/token`);
+        let resJSON = await res.json();
+        accessToken = resJSON.access_token;
+        if (accessToken === undefined) {
+            showHelpers('login');
+            return 'Please login first';
+        }
 
-      const { headers = {} } = opts;
-      return fetch(
-        "https://developer.api.autodesk.com/dataexchange/2023-05/graphql",
-        {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + accessToken,
-            ...headers,
-          },
-          body: JSON.stringify(graphQLParams),
-        }
-      ).then(async (response) => {
-        queryResponse = await response.json();
-        if (!!globalViewer) {
-          globalViewer.getExtension('DXFilterExtension').filterModel();
-        }
-        return queryResponse;
-      });
+        const {headers = {}} = opts;
+        return fetch(
+            "https://developer.api.autodesk.com/dataexchange/2023-05/graphql",
+            {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + accessToken,
+                    ...headers,
+                },
+                body: JSON.stringify(graphQLParams),
+            }
+        ).then(async (response) => {
+            queryResponse = await response.json();
+            if (!!globalViewer) {
+                globalViewer.getExtension('DXFilterExtension').filterModel();
+            }
+            return queryResponse;
+        });
     }
 
     function onTabs(data) {
-      console.log(data)
+        console.log(data)
     }
 
     async function showHelpers(elementId) {
-      let itemInput = document.getElementById(elementId);
-      itemInput.setAttribute('data-balloon-visible', '');
-      setTimeout(() => { itemInput.removeAttribute('data-balloon-visible', ''); }, 5000);
+        let itemInput = document.getElementById(elementId);
+        itemInput.setAttribute('data-balloon-visible', '');
+        setTimeout(() => {
+            itemInput.removeAttribute('data-balloon-visible', '');
+        }, 5000);
     }
 
     class GraphiQLWrapper extends React.Component {
-      componentDidMount() {
-        const graphiqlContainer = document.getElementsByClassName('graphiql-container')[0];
-        if (graphiqlContainer) {
-          graphiqlContainer.style.overflow = 'auto';
+        componentDidMount() {
+            const graphiqlContainer = document.getElementsByClassName('graphiql-container')[0];
+            if (graphiqlContainer) {
+                graphiqlContainer.style.overflow = 'auto';
+            }
         }
-      }
 
-      render() {
-        return React.createElement(GraphiQL, {
-          fetcher: this.props.fetcher,
-          defaultEditorToolsVisibility: this.props.defaultEditorToolsVisibility,
-          onTabs: this.props.onTabs,
-          query: this.props.query,
-          defaultQuery: this.props.defaultQuery,
-        });
-      }
+        render() {
+            return React.createElement(GraphiQL, {
+                fetcher: this.props.fetcher,
+                defaultEditorToolsVisibility: this.props.defaultEditorToolsVisibility,
+                onTabs: this.props.onTabs,
+                query: this.props.query,
+                defaultQuery: this.props.defaultQuery,
+            });
+        }
     }
 
     ReactDOM.render(
-      React.createElement(GraphiQLWrapper, {
-        fetcher: graphQLFetcher,
-        defaultEditorToolsVisibility: true,
-        onTabs: onTabs,
-        query: defaultQuery,
-        defaultQuery: { defaultQuery },
-      }),
-      document.getElementById('graphiql'),
+        React.createElement(GraphiQLWrapper, {
+            fetcher: graphQLFetcher,
+            defaultEditorToolsVisibility: true,
+            onTabs: onTabs,
+            query: defaultQuery,
+            defaultQuery: {defaultQuery},
+        }),
+        document.getElementById('graphiql'),
     );
-  </script>
-  <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.js"></script>
+</script>
+<script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.js"></script>
 </body>
 
 </html>
